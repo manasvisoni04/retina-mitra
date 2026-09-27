@@ -122,7 +122,7 @@ export const CanvasImageViewer: React.FC<CanvasImageViewerProps> = ({
     >
       {/* ─── LAYER SELECTOR RIBBON (SWIPABLE ON MOBILE) ─── */}
       <div className="border-b border-white/20 bg-black/40 backdrop-blur-md px-3 sm:px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 font-mono text-xs overflow-x-auto no-scrollbar w-full sm:w-auto py-0.5">
+        <div className="flex items-center gap-1.5 font-mono text-xs overflow-x-auto no-scrollbar scroll-smooth touch-pan-x w-full sm:w-auto py-0.5">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeLayer === tab.id;
@@ -134,7 +134,7 @@ export const CanvasImageViewer: React.FC<CanvasImageViewerProps> = ({
                   sound.playClick(720);
                   setActiveLayer(tab.id);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full uppercase tracking-wider transition-all shrink-0 whitespace-nowrap ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full uppercase tracking-wider transition-all shrink-0 whitespace-nowrap min-h-[36px] ${
                   isActive
                     ? 'bg-[var(--accent)] text-[var(--ink)] font-bold shadow-md'
                     : 'text-[#CFCFC4] hover:text-white hover:bg-white/10'
@@ -154,42 +154,42 @@ export const CanvasImageViewer: React.FC<CanvasImageViewerProps> = ({
             <button
               type="button"
               onClick={handleZoomOut}
-              className="p-1 rounded-full hover:bg-white/10 text-white"
+              className="p-2 sm:p-1.5 rounded-full hover:bg-white/10 text-white min-w-[34px] min-h-[34px] flex items-center justify-center active:scale-90 transition-transform"
               title="Zoom out"
             >
-              <ZoomOut className="w-3.5 h-3.5" />
+              <ZoomOut className="w-4 h-4" />
             </button>
-            <span className="font-mono text-[10px] w-10 text-center font-bold text-[var(--accent)]">
+            <span className="font-mono text-[11px] w-11 text-center font-bold text-[var(--accent)] select-none">
               {Math.round(zoom * 100)}%
             </span>
             <button
               type="button"
               onClick={handleZoomIn}
-              className="p-1 rounded-full hover:bg-white/10 text-white"
+              className="p-2 sm:p-1.5 rounded-full hover:bg-white/10 text-white min-w-[34px] min-h-[34px] flex items-center justify-center active:scale-90 transition-transform"
               title="Zoom in"
             >
-              <ZoomIn className="w-3.5 h-3.5" />
+              <ZoomIn className="w-4 h-4" />
             </button>
             <button
               type="button"
               onClick={handleResetZoom}
-              className="p-1 rounded-full hover:bg-white/10 text-white"
+              className="p-2 sm:p-1.5 rounded-full hover:bg-white/10 text-white min-w-[34px] min-h-[34px] flex items-center justify-center active:scale-90 transition-transform"
               title="Reset view"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-4 h-4" />
             </button>
           </div>
 
           <button
             type="button"
             onClick={() => {
-              sound.playClick();
+              sound.playClick(650);
               setIsFullscreen(!isFullscreen);
             }}
-            className="p-2 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white"
+            className="p-2 sm:p-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white min-w-[34px] min-h-[34px] flex items-center justify-center active:scale-90 transition-transform"
             title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Canvas'}
           >
-            {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
         </div>
       </div>

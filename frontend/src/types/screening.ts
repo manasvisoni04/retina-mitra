@@ -118,6 +118,21 @@ export interface AuditEvent {
   details: string;
 }
 
+export interface EssentialPatientDetails {
+  diabetesType: 'Type 2 Diabetes' | 'Type 1 Diabetes' | 'Gestational Diabetes' | 'Pre-diabetes';
+  diabetesDurationYears: number | string;
+  recentBloodGlucose?: string;
+  latestHbA1c?: string;
+  currentMedications: string;
+  insulinUse: boolean;
+  ocularSymptoms: string[];
+  eyeHistory: string[];
+  systemicConditions: string[];
+  pregnancyStatus: 'Not Pregnant' | 'Currently Pregnant' | 'Not Applicable (Male)';
+  patientAge?: string | number;
+  patientGender?: 'Male' | 'Female' | 'Other';
+}
+
 export interface Screening {
   screeningId: string;
   createdAt: string;
@@ -142,4 +157,5 @@ export interface Screening {
   auditTrail?: AuditEvent[];
   evidence: VisualEvidence;
   processingMetadata: ProcessingMetadata;
+  patientDetails?: EssentialPatientDetails;
 }

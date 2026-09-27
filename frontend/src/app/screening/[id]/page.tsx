@@ -6,6 +6,8 @@ import { useParams } from 'next/navigation';
 import { useSessionStore } from '@/hooks/useSessionStore';
 import { generateReport } from '@/lib/generateReport';
 import { CanvasImageViewer } from '@/components/CanvasImageViewer';
+import { PatientDetailsModal } from '@/components/PatientDetailsModal';
+import { EssentialPatientDetails } from '@/types/screening';
 import { sound } from '@/lib/sound';
 import {
   ArrowLeft,
@@ -29,6 +31,9 @@ export default function ScreeningDetailPage() {
   const [reviewerNote, setReviewerNote] = useState<string>('');
   const [reviewFeedback, setReviewFeedback] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [isOverrideOpen, setIsOverrideOpen] = useState<boolean>(false);
+  const [overrideGrade, setOverrideGrade] = useState<number>(2);
+  const [isAuditTrailExpanded, setIsAuditTrailExpanded] = useState<boolean>(true);
 
   if (!screenedCase || !screening) {
     return (
@@ -60,33 +65,55 @@ export default function ScreeningDetailPage() {
 
   const handleReviewAction = (
     action: 'CONFIRMED' | 'RE_REVIEW' | 'UNGRADABLE' | 'OVERRIDDEN',
-    label: string
+    label: string,
+    chosenOverrideGrade?: number
   ) => {
     sound.playClick(850);
+    const now = new Date().toISOString();
+    const targetGrade = action === 'OVERRIDDEN' ? (chosenOverrideGrade !== undefined ? chosenOverrideGrade : overrideGrade) : undefined;
+    const comments = reviewerNote.trim() || (action === 'CONFIRMED' ? 'Confirmed by specialist' : action === 'OVERRIDDEN' ? `Overridden to Grade ${targetGrade}` : 'Flagged ungradable');
+
     submitReview(screening.screeningId, {
       reviewerId: 'DR-SPECIALIST-01',
       action,
-      comments: reviewerNote || `Clinical action: ${label}`,
-      reviewedAt: new Date().toISOString(),
+      overrideGrade: targetGrade,
+      comments,
+      reviewedAt: now,
     });
+
     setReviewFeedback(`Specialist action registered: ${label}`);
     setTimeout(() => setReviewFeedback(null), 4000);
+    setIsOverrideOpen(false);
   };
 
-  const handleDownloadPDF = async () => {
+  const [isPatientModalOpen, setIsPatientModalOpen] = useState<boolean>(false);
+
+  const handleDownloadPDF = () => {
     sound.playClick(950);
+    setIsPatientModalOpen(true);
+  };
+
+  const handleConfirmPatientDetails = async (details: EssentialPatientDetails) => {
+    sound.playClick(900);
     setIsDownloading(true);
     try {
-      if (reviewerNote) {
+      screening.patientDetails = details;
+      
+      // Preserve active review decision or active specialist observation
+      if (screening.reviewDecision) {
+        // already has official reviewDecision
+      } else if (reviewerNote.trim()) {
         screening.reviewDecision = {
           reviewerId: 'DR-SPECIALIST-01',
           action: 'CONFIRMED',
-          comments: reviewerNote,
+          comments: reviewerNote.trim(),
           reviewedAt: new Date().toISOString(),
         };
       }
+
       await generateReport(screening);
       markReportGenerated(screening.screeningId);
+      setIsPatientModalOpen(false);
     } catch (err) {
       console.error('PDF generation failed:', err);
     } finally {
@@ -189,30 +216,139 @@ export default function ScreeningDetailPage() {
       </div>
 
       {/* ─── SPECIALIST REVIEW PANEL ─── */}
-      <div className="p-6 sm:p-8 rounded-3xl border-[2.5px] border-[var(--ink)] bg-[var(--paper)] shadow-[6px_6px_0_var(--ink)] space-y-4">
-        <h3 className="text-xl font-bold uppercase tracking-tight">Specialist Sign-off Station</h3>
-        <input
-          type="text"
-          value={reviewerNote}
-          onChange={(e) => setReviewerNote(e.target.value)}
-          placeholder="Record specialist observations or justification for override..."
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--bg)] font-mono text-xs text-[var(--ink)] placeholder:text-[var(--ink-mute)] focus:outline-none min-h-[44px]"
-        />
+      <div className="p-6 sm:p-8 rounded-3xl border-[2.5px] border-[var(--ink)] bg-[var(--paper)] shadow-[6px_6px_0_var(--ink)] space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--ok)] animate-pulse" />
+              <h3 className="text-xl font-bold uppercase tracking-tight">Specialist Sign-off Station &amp; Audit Trail</h3>
+            </div>
+            <p className="font-mono text-xs text-[var(--ink-soft)] mt-0.5">
+              Record specialist observations or justification for override before generating official referral report:
+            </p>
+          </div>
 
-        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 pt-2">
+          {screening.reviewDecision && (
+            <div className={`self-start sm:self-auto px-3.5 py-1.5 rounded-full font-mono text-xs font-bold border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] flex items-center gap-1.5 ${
+              screening.reviewDecision.action === 'CONFIRMED'
+                ? 'bg-[var(--ok)] text-[var(--ink)]'
+                : screening.reviewDecision.action === 'OVERRIDDEN'
+                ? 'bg-amber-400 text-[var(--ink)]'
+                : 'bg-rose-400 text-[var(--ink)]'
+            }`}>
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>
+                {screening.reviewDecision.action === 'CONFIRMED' && '✓ SIGNED-OFF'}
+                {screening.reviewDecision.action === 'OVERRIDDEN' && `⚠️ OVERRIDDEN (Grade ${screening.reviewDecision.overrideGrade ?? 'Clinical'})`}
+                {screening.reviewDecision.action === 'UNGRADABLE' && '⛔ RETAKE FLAGGED'}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="text"
+            value={reviewerNote}
+            onChange={(e) => setReviewerNote(e.target.value)}
+            placeholder="Record specialist observations or justification for override..."
+            className="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-white text-slate-900 font-mono text-xs font-bold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--ink)] focus:bg-white shadow-[2px_2px_0_var(--ink)] min-h-[44px]"
+          />
+
+          {/* Quick Clinical Observation Tags */}
+          <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+            <span className="font-mono text-[10px] uppercase font-bold text-[var(--ink-mute)] mr-1">
+              Quick Tags:
+            </span>
+            {[
+              'FAZ margins intact',
+              'Microaneurysms detected in macula',
+              'Dot/blot hemorrhages >2 quadrants',
+              'Hard exudates within 1DD of fovea',
+              'Optical artifact overcalled',
+            ].map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => {
+                  sound.playClick(600);
+                  setReviewerNote((prev) => (prev ? `${prev}; ${tag}` : tag));
+                }}
+                className="px-2.5 py-1 rounded-full font-mono text-[10px] font-bold border border-[var(--ink)]/30 bg-[var(--bg)] text-[var(--ink)] hover:border-[var(--ink)] hover:bg-[var(--paper)] transition-all shadow-sm"
+              >
+                + {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Interactive Clinical Override Tray */}
+        {isOverrideOpen && (
+          <div className="p-4 sm:p-5 rounded-2xl border-2 border-[var(--ink)] bg-[var(--bg)] shadow-[3px_3px_0_var(--ink)] space-y-3 animate-in fade-in duration-200">
+            <div className="font-mono text-xs uppercase font-extrabold text-[var(--ink)] flex items-center justify-between">
+              <span>Select Clinician DR Grade Override:</span>
+              <span className="text-[10px] text-amber-800 font-bold">Overrides AI Classification</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              {[
+                { grade: 0, label: 'Grade 0: No DR' },
+                { grade: 1, label: 'Grade 1: Mild DR' },
+                { grade: 2, label: 'Grade 2: Moderate DR' },
+                { grade: 3, label: 'Grade 3: Severe DR' },
+                { grade: 4, label: 'Grade 4: PDR' },
+              ].map((item) => (
+                <button
+                  key={item.grade}
+                  type="button"
+                  onClick={() => {
+                    sound.playClick(750);
+                    setOverrideGrade(item.grade);
+                  }}
+                  className={`p-2.5 rounded-xl border-2 font-mono text-[11px] font-bold text-center transition-all ${
+                    overrideGrade === item.grade
+                      ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--accent)] shadow-[2px_2px_0_var(--ink)]'
+                      : 'border-[var(--ink)]/40 bg-[var(--paper)] text-[var(--ink)] hover:border-[var(--ink)]'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => handleReviewAction('OVERRIDDEN', 'Overridden Grade', overrideGrade)}
+                className="px-5 py-2.5 rounded-full border-2 border-[var(--ink)] bg-amber-400 text-[var(--ink)] font-extrabold font-mono text-xs uppercase shadow-[2px_2px_0_var(--ink)] hover:scale-105 active:scale-95 transition-all"
+              >
+                Confirm Override &amp; Apply
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 pt-2 border-t border-[var(--ink)]/20">
           <button
             type="button"
             onClick={() => handleReviewAction('CONFIRMED', 'Confirmed Grade')}
-            className="w-full sm:w-auto px-5 py-3 sm:py-2.5 rounded-full border-2 border-[var(--ink)] bg-[var(--ok)] text-[var(--ink)] font-bold text-xs uppercase hover:scale-105 active:scale-95 transition-all shadow-[2px_2px_0_var(--ink)] text-center min-h-[44px]"
+            className={`w-full sm:w-auto px-5 py-3 sm:py-2.5 rounded-full border-2 border-[var(--ink)] font-bold text-xs uppercase hover:scale-105 active:scale-95 transition-all shadow-[2px_2px_0_var(--ink)] text-center min-h-[44px] ${
+              screening.reviewDecision?.action === 'CONFIRMED'
+                ? 'bg-[var(--ok)] text-[var(--ink)] ring-2 ring-[var(--ink)]'
+                : 'bg-[var(--ok)] text-[var(--ink)]'
+            }`}
           >
             ✓ Confirm Classification
           </button>
           <button
             type="button"
-            onClick={() => handleReviewAction('OVERRIDDEN', 'Overridden Grade')}
-            className="w-full sm:w-auto px-5 py-3 sm:py-2.5 rounded-full border-2 border-[var(--ink)] bg-amber-400 text-[var(--ink)] font-bold text-xs uppercase hover:scale-105 active:scale-95 transition-all shadow-[2px_2px_0_var(--ink)] text-center min-h-[44px]"
+            onClick={() => {
+              sound.playClick(700);
+              setIsOverrideOpen(!isOverrideOpen);
+            }}
+            className={`w-full sm:w-auto px-5 py-3 sm:py-2.5 rounded-full border-2 border-[var(--ink)] bg-amber-400 text-[var(--ink)] font-bold text-xs uppercase hover:scale-105 active:scale-95 transition-all shadow-[2px_2px_0_var(--ink)] text-center min-h-[44px] ${
+              isOverrideOpen ? 'ring-2 ring-[var(--ink)]' : ''
+            }`}
           >
-            Override Classification
+            Override Classification {isOverrideOpen ? '▲' : '▼'}
           </button>
           <button
             type="button"
@@ -222,7 +358,77 @@ export default function ScreeningDetailPage() {
             Request Retake
           </button>
         </div>
+
+        {/* Live Chronological Audit Trail */}
+        <div className="pt-4 border-t-2 border-[var(--ink)]/15">
+          <div
+            onClick={() => setIsAuditTrailExpanded(!isAuditTrailExpanded)}
+            className="flex items-center justify-between cursor-pointer select-none py-1 text-[var(--ink)] hover:text-[var(--ink-soft)] transition-colors"
+          >
+            <div className="font-mono text-xs font-bold uppercase flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-[var(--ink)]" />
+              <span>Chronological Audit Trail ({screening.auditTrail?.length || 0} Events)</span>
+            </div>
+            <span className="font-mono text-xs font-bold">
+              {isAuditTrailExpanded ? 'Hide ▲' : 'Show ▼'}
+            </span>
+          </div>
+
+          {isAuditTrailExpanded && (
+            <div className="mt-3 space-y-2 max-h-56 overflow-y-auto pr-1">
+              {screening.auditTrail && screening.auditTrail.length > 0 ? (
+                screening.auditTrail.map((event, idx) => (
+                  <div
+                    key={event.id || idx}
+                    className="p-3 rounded-xl border-2 border-[var(--ink)]/25 bg-white text-slate-900 font-mono text-[11px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-[1px_1px_0_var(--ink)]"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span
+                        className={`px-2 py-0.5 rounded-full font-bold text-[10px] uppercase border ${
+                          event.actorRole === 'reviewer'
+                            ? 'bg-amber-100 text-amber-900 border-amber-400'
+                            : event.actorRole === 'operator'
+                            ? 'bg-blue-100 text-blue-900 border-blue-400'
+                            : 'bg-slate-100 text-slate-800 border-slate-300'
+                        }`}
+                      >
+                        {event.actorId}
+                      </span>
+                      <span className="font-bold text-[var(--ink)]">
+                        [{event.action}]
+                      </span>
+                      <span className="text-slate-700 font-medium">
+                        {event.details}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-[var(--ink-mute)] whitespace-nowrap shrink-0">
+                      {new Date(event.timestamp).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div className="p-3 rounded-xl border border-dashed border-[var(--ink)]/30 text-center font-mono text-xs text-[var(--ink-soft)]">
+                  No audit events recorded yet.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Mandatory Clinical Patient Profile Intake Modal */}
+      <PatientDetailsModal
+        isOpen={isPatientModalOpen}
+        patientAlias={screening.patientAlias}
+        screeningId={screening.screeningId}
+        onClose={() => setIsPatientModalOpen(false)}
+        onSubmit={handleConfirmPatientDetails}
+        isDownloading={isDownloading}
+      />
     </div>
   );
 }

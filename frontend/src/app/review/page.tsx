@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function ReviewPage() {
-  const { casesRequiringReview } = useSessionStore();
+  const { casesRequiringReview, loadDemoCases } = useSessionStore();
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--ink)] pt-24 sm:pt-28 pb-28 sm:pb-32 px-4 sm:px-8 max-w-[1400px] mx-auto selection:bg-[var(--ink)] selection:text-[var(--accent)]">
@@ -53,13 +53,23 @@ export default function ReviewPage() {
             </div>
             <h3 className="text-2xl font-bold uppercase tracking-tight">Triage Queue Clear</h3>
             <p className="font-mono text-xs text-[var(--ink-soft)] max-w-md mx-auto">
-              All active camp screenings have been verified by ophthalmologists. No borderline cases awaiting sign-off.
+              All active camp screenings have been verified by ophthalmologists. No borderline cases currently awaiting sign-off.
             </p>
-            <div className="pt-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playClick(800);
+                  loadDemoCases();
+                }}
+                className="w-full sm:w-auto px-6 py-3 rounded-full border-2 border-[var(--ink)] bg-[var(--accent)] text-[var(--ink)] font-extrabold text-xs uppercase tracking-wider shadow-[3px_3px_0_var(--ink)] hover:scale-105 active:scale-95 transition-all"
+              >
+                Load Cases Requiring Review
+              </button>
               <Link
                 href="/screening/new"
-                onClick={() => sound.playClick()}
-                className="inline-block px-6 py-3 rounded-full bg-[var(--ink)] text-[var(--accent)] font-bold text-xs uppercase shadow-[3px_3px_0_var(--ink)] no-underline"
+                onClick={() => sound.playClick(900)}
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[var(--ink)] text-[var(--accent)] font-extrabold text-xs uppercase tracking-wider shadow-[3px_3px_0_var(--ink)] hover:scale-105 active:scale-95 transition-all no-underline text-center"
               >
                 Intake New Case
               </Link>

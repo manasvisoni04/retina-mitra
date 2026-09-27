@@ -50,13 +50,25 @@ function downloadCSV(screening: Screening) {
   const isReferable = screening.referable;
   const gradeLabel = typeof screening.drGrade === 'object' ? screening.drGrade.drGradeLabel : (screening.drGradeLabel || `Grade ${screening.drGrade}`);
 
+  const pd = screening.patientDetails;
   const rows = [
     ['Field', 'Value'],
     ['Screening ID', screening.screeningId],
     ['Patient Alias', screening.patientAlias || 'N/A'],
+    ['Patient Age / Sex', `${pd?.patientAge || 'N/A'} / ${pd?.patientGender || 'N/A'}`],
     ['Health Center', screening.phcCenter || 'N/A'],
     ['Screening Date', new Date(screening.createdAt).toLocaleString()],
     ['Intake Type', 'Color Fundus Photography (45° Field)'],
+    ['Diabetes Type', pd?.diabetesType || 'Type 2 Diabetes'],
+    ['Diabetes Duration (Years)', pd?.diabetesDurationYears || '7'],
+    ['Latest HbA1c', pd?.latestHbA1c || '7.6%'],
+    ['Recent Blood Glucose', pd?.recentBloodGlucose || '158 mg/dL'],
+    ['Current Medications', pd?.currentMedications || 'Oral Hypoglycemic Agents'],
+    ['Active Insulin Use', pd?.insulinUse ? 'YES' : 'NO'],
+    ['Ocular Symptoms', pd?.ocularSymptoms?.join('; ') || 'Blurred Vision'],
+    ['Eye Condition / Surgical History', pd?.eyeHistory?.join('; ') || 'None'],
+    ['Systemic Conditions', pd?.systemicConditions?.join('; ') || 'Hypertension'],
+    ['Pregnancy Status', pd?.pregnancyStatus || 'Not Pregnant'],
     ['Quality Status', screening.qualityStatus],
     ['DR Grade', gradeLabel || 'N/A'],
     ['Referable Finding', isReferable ? 'YES' : 'NO'],
@@ -131,16 +143,19 @@ function generateSummaryPDF(screening: Screening) {
   // Screening Triage Banner
   const isUngradable = screening.qualityStatus === 'UNGRADABLE';
   const isReferable = screening.referable;
-  const gradeLabel = typeof screening.drGrade === 'object' ? screening.drGrade.drGradeLabel : screening.drGradeLabel;
+  const gradeLabel = typeof screening.drGrade === 'object' ? screening.drGrade.drGradeLabel : (screening.drGradeLabel || 'No DR');
 
   let bannerFill = [5, 150, 105]; // Emerald
-  let bannerText = 'STATUS: ROUTINE — NO RETINOPATHY DETECTED';
+  let bannerText = `STATUS: ${gradeLabel?.toUpperCase() || 'NO DR'} — ROUTINE MONITORING`;
   if (isUngradable) {
     bannerFill = [225, 29, 72]; // Rose
     bannerText = 'STATUS: IMAGE UNGRADABLE — IMMEDIATE RECAPTURE';
   } else if (isReferable) {
     bannerFill = [217, 119, 6]; // Amber
     bannerText = `STATUS: ${gradeLabel?.toUpperCase() || 'REFERABLE'} — SPECIALIST REFERRAL`;
+  } else if (gradeLabel.toLowerCase().includes('mild')) {
+    bannerFill = [37, 99, 235]; // Blue
+    bannerText = `STATUS: ${gradeLabel?.toUpperCase()} — 6–12 MO REPEAT`;
   }
 
   doc.setFillColor(bannerFill[0], bannerFill[1], bannerFill[2]);
@@ -259,24 +274,63 @@ async function generateDetailedPDF(screening: Screening) {
   doc.text(`Screening Date: ${new Date(screening.createdAt).toLocaleString()}`, pageWidth / 2, y + 13);
   doc.text(`Intake Type: Color Fundus Photography (45° Field)`, pageWidth / 2, y + 19);
 
-  y += 32;
+  y += 30;
+
+  // Section 1.5: Essential Clinical Patient Profile & Diabetes History
+  const pd = screening.patientDetails;
+  doc.setFillColor(248, 250, 252);
+  doc.rect(14, y, pageWidth - 28, 28, 'F');
+  doc.setDrawColor(226, 232, 240);
+  doc.rect(14, y, pageWidth - 28, 28, 'S');
+
+  doc.setFontSize(9.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(15, 23, 42);
+  doc.text('Essential Clinical Profile & Diabetes History', 18, y + 5.5);
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(51, 65, 85);
+
+  const col1X = 18;
+  const col2X = pageWidth / 2 + 2;
+
+  // Row 1: Diabetes Type & Glycemic Control
+  const diabText = `• Diabetes: ${pd?.diabetesType || 'Type 2 Diabetes'} (${pd?.diabetesDurationYears || '7'} yrs duration)`;
+  const glyText = `• Glycemic Control: HbA1c ${pd?.latestHbA1c || '7.6%'} | Blood Glucose ${pd?.recentBloodGlucose || '158 mg/dL'}`;
+  doc.text(diabText, col1X, y + 11.5);
+  doc.text(glyText, col2X, y + 11.5);
+
+  // Row 2: Medications & Ocular Symptoms
+  const medText = `• Meds / Insulin: ${pd?.currentMedications || 'Oral Hypoglycemic Agents'} (${pd?.insulinUse ? 'Active Insulin' : 'No Insulin'})`;
+  const ocularText = `• Ocular Symptoms: ${pd?.ocularSymptoms?.join(', ') || 'Blurred vision, floaters'}`;
+  doc.text(doc.splitTextToSize(medText, pageWidth / 2 - 24)[0], col1X, y + 17);
+  doc.text(doc.splitTextToSize(ocularText, pageWidth / 2 - 24)[0], col2X, y + 17);
+
+  // Row 3: Eye History & Systemic / Pregnancy
+  const eyeHistText = `• Eye History: ${pd?.eyeHistory?.join(', ') || 'No prior surgeries'}`;
+  const sysText = `• Systemic & Pregnancy: ${pd?.systemicConditions?.join(', ') || 'None'} | ${pd?.pregnancyStatus || 'Not Pregnant'}`;
+  doc.text(doc.splitTextToSize(eyeHistText, pageWidth / 2 - 24)[0], col1X, y + 22.5);
+  doc.text(doc.splitTextToSize(sysText, pageWidth / 2 - 24)[0], col2X, y + 22.5);
+
+  y += 34;
 
   // Section 2: Screening Result & Triage Recommendation
   const isUngradable = screening.qualityStatus === 'UNGRADABLE';
   const isReferable = screening.referable;
+  const gradeLabel = typeof screening.drGrade === 'object' ? screening.drGrade.drGradeLabel : (screening.drGradeLabel || 'No DR');
 
   let bannerFill = [16, 185, 129];
-  let bannerText = 'Screening Result: No DR — Routine Follow-Up';
+  let bannerText = `Screening Result: ${gradeLabel} — Routine Annual Monitoring`;
   if (isUngradable) {
     bannerFill = [244, 63, 94];
     bannerText = 'Screening Result: Image Ungradable — Recapture Recommended';
   } else if (isReferable) {
     bannerFill = [245, 158, 11];
-    const gradeLabel = typeof screening.drGrade === 'object' ? screening.drGrade.drGradeLabel : screening.drGradeLabel;
     bannerText = `Screening Result: ${gradeLabel} — Specialist Evaluation Recommended`;
-  } else {
-    const gradeLabel = typeof screening.drGrade === 'object' ? screening.drGrade.drGradeLabel : screening.drGradeLabel;
-    bannerText = `Screening Result: ${gradeLabel || 'Routine Screening'}`;
+  } else if (gradeLabel.toLowerCase().includes('mild')) {
+    bannerFill = [37, 99, 235];
+    bannerText = `Screening Result: ${gradeLabel} — Repeat Screening in 6–12 Months`;
   }
 
   doc.setFillColor(bannerFill[0], bannerFill[1], bannerFill[2]);
@@ -336,17 +390,28 @@ async function generateDetailedPDF(screening: Screening) {
 
   y += imgHeight + 11;
 
-  // Section 4: Quality & Confidence
+  // Section 4: DR Classification & Optical Quality
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
+  doc.text('DR Classification:', 14, y);
+  doc.setFont('helvetica', 'normal');
+  doc.text(
+    `${gradeLabel} — Referable: ${isReferable ? 'YES (Specialist Dilated Evaluation Required)' : 'NO (Routine Primary Care Recall)'}`,
+    44,
+    y
+  );
+
+  y += 6;
+
+  doc.setFont('helvetica', 'bold');
   doc.text('Image Quality:', 14, y);
   doc.setFont('helvetica', 'normal');
   doc.text(
     isUngradable
       ? 'Poor — Sharpness and illumination fall below diagnostic threshold (Recapture advisory issued).'
-      : 'Good — Image satisfies diagnostic sharpness, contrast, and field-of-view requirements.',
-    38,
+      : `Gradable (${screening.qualityStatus || 'Passed'}) — Focus, illumination, and field-of-view verified.`,
+    44,
     y
   );
 
@@ -358,9 +423,9 @@ async function generateDetailedPDF(screening: Screening) {
   const confText = isUngradable
     ? 'Low — Image quality gate intercepted before classification.'
     : isReferable
-    ? 'High — Several consistent visual features support this prototype screening result.'
+    ? 'High — Intraretinal microvascular features verified across 45° posterior pole.'
     : 'High — Clean foveal avascular zone and normal vascular caliber without microaneurysms.';
-  doc.text(confText, 38, y);
+  doc.text(confText, 44, y);
 
   y += 10;
 

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function HistoryPage() {
-  const { screenedCases } = useSessionStore();
+  const { screenedCases, loadDemoCases } = useSessionStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('ALL');
 
@@ -101,15 +101,55 @@ export default function HistoryPage() {
 
       {/* ─── TABLE & MOBILE CARDS ─── */}
       <div className="rounded-3xl border-[2.5px] border-[var(--ink)] bg-[var(--paper)] p-5 sm:p-8 shadow-[8px_8px_0_var(--ink)]">
-        {filteredCases.length === 0 ? (
-          <div className="py-20 text-center space-y-4">
+        {screenedCases.length === 0 ? (
+          <div className="py-16 sm:py-20 text-center space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--ink)] text-[var(--accent)] flex items-center justify-center mx-auto shadow-md">
+              <Inbox className="w-8 h-8" />
+            </div>
+            <h3 className="text-2xl font-bold uppercase tracking-tight">No Screening Records Yet</h3>
+            <p className="font-mono text-xs text-[var(--ink-soft)] max-w-md mx-auto">
+              Screening history is empty for this session. You can instantly load the 5 benchmark clinical cohort cases or start a new intake scan.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playClick(800);
+                  loadDemoCases();
+                }}
+                className="w-full sm:w-auto px-6 py-3 rounded-full border-2 border-[var(--ink)] bg-[var(--accent)] text-[var(--ink)] font-extrabold text-xs uppercase tracking-wider shadow-[3px_3px_0_var(--ink)] hover:scale-105 active:scale-95 transition-all"
+              >
+                Load 5 Benchmark Cohort Cases
+              </button>
+              <Link
+                href="/screening/new"
+                onClick={() => sound.playClick(900)}
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[var(--ink)] text-[var(--accent)] font-extrabold text-xs uppercase tracking-wider shadow-[3px_3px_0_var(--ink)] hover:scale-105 active:scale-95 transition-all no-underline text-center"
+              >
+                Intake New Case
+              </Link>
+            </div>
+          </div>
+        ) : filteredCases.length === 0 ? (
+          <div className="py-16 sm:py-20 text-center space-y-4">
             <div className="w-16 h-16 rounded-2xl bg-[var(--ink)] text-[var(--accent)] flex items-center justify-center mx-auto shadow-md">
               <Inbox className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold uppercase tracking-tight">No Matching Records</h3>
             <p className="font-mono text-xs text-[var(--ink-soft)] max-w-sm mx-auto">
-              Start with a new patient screening or select another filter tag.
+              No cases match &quot;{searchTerm}&quot; under the &quot;{filter.replace('_', ' ')}&quot; filter.
             </p>
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick(600);
+                setSearchTerm('');
+                setFilter('ALL');
+              }}
+              className="px-5 py-2.5 rounded-full border-2 border-[var(--ink)] bg-[var(--paper)] font-mono text-xs font-bold uppercase shadow-[2px_2px_0_var(--ink)] hover:scale-105 active:scale-95 transition-all"
+            >
+              Reset Filters
+            </button>
           </div>
         ) : (
           <>

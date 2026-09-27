@@ -30,6 +30,7 @@ interface SessionStoreContextType {
   getScreenedCase: (caseId: string) => ScreenedCase | undefined;
   markReportGenerated: (caseId: string) => void;
   submitReview: (caseId: string, review: ReviewDecision) => void;
+  loadDemoCases: () => void;
   casesRequiringReview: ScreenedCase[];
   totalScreened: number;
 }
@@ -46,6 +47,7 @@ const SessionStoreContext = createContext<SessionStoreContextType>({
   getScreenedCase: () => undefined,
   markReportGenerated: () => {},
   submitReview: () => {},
+  loadDemoCases: () => {},
   casesRequiringReview: [],
   totalScreened: 0,
 });
@@ -238,6 +240,25 @@ export const SessionStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
     });
   }, []);
 
+  const loadDemoCases = useCallback(() => {
+    const now = new Date().toISOString();
+    const demoEntries: ScreenedCase[] = DEMO_CASES.map((d) => ({
+      caseId: d.screeningId,
+      screening: demoCaseToScreening(d),
+      screenedAt: now,
+      reportGenerated: false,
+    }));
+
+    setState((prev) => {
+      const existingIds = new Set(prev.screenedCases.map((s) => s.caseId.toUpperCase()));
+      const toAdd = demoEntries.filter((e) => !existingIds.has(e.caseId.toUpperCase()));
+      return {
+        ...prev,
+        screenedCases: [...prev.screenedCases, ...toAdd],
+      };
+    });
+  }, []);
+
   const casesRequiringReview = state.screenedCases.filter(
     (c) => c.screening.requiresHumanReview && c.screening.reviewStatus === 'REVIEW_REQUIRED'
   );
@@ -251,6 +272,7 @@ export const SessionStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         getScreenedCase,
         markReportGenerated,
         submitReview,
+        loadDemoCases,
         casesRequiringReview,
         totalScreened: state.screenedCases.length,
       }}

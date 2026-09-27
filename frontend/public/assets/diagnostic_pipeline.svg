@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="100%" height="100%">
+  <defs>
+    <filter id="pipeShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#0E0E0C" flood-opacity="1" />
+    </filter>
+    <filter id="pillShadow2" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#0E0E0C" flood-opacity="1" />
+    </filter>
+    <linearGradient id="pipeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EEF5FA" />
+      <stop offset="100%" stop-color="#E2EEF7" />
+    </linearGradient>
+    <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#0E0E0C" stroke-width="0.75" opacity="0.06" />
+    </pattern>
+  </defs>
+
+  <style>
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .card-title { font-weight: 900; font-size: 14px; text-transform: uppercase; fill: #0E0E0C; }
+    .step-badge { font-weight: 800; font-size: 10px; fill: #0E0E0C; }
+    .desc-text { font-size: 11px; fill: #303A40; font-weight: 600; line-height: 1.4; }
+  </style>
+
+  <!-- Container -->
+  <rect width="1200" height="400" rx="28" fill="url(#pipeGrad)" stroke="#0E0E0C" stroke-width="4" />
+  <rect width="1200" height="400" rx="28" fill="url(#gridPattern)" />
+
+  <!-- Top Title Banner -->
+  <g transform="translate(40, 32)">
+    <rect width="260" height="30" rx="15" fill="#0E0E0C" />
+    <circle cx="16" cy="15" r="4" fill="#8ED8FF" />
+    <text x="28" y="19" class="mono" font-size="10.5" font-weight="800" fill="#FFFFFF" letter-spacing="0.1em">
+      CLINICAL DECISION PIPELINE
+    </text>
+    <text x="280" y="21" class="sans" font-size="15" font-weight="900" fill="#0E0E0C" text-transform="uppercase">
+      5-Stage Non-Prescriptive Safety Architecture
+    </text>
+  </g>
+
+  <!-- Connecting Bus Line -->
+  <path d="M 140 215 L 1060 215" stroke="#0E0E0C" stroke-width="3" stroke-dasharray="6 6" opacity="0.35" />
+
+  <!-- ─── STAGE 1: OPTICAL QUALITY GATE ─── -->
+  <g transform="translate(40, 85)" filter="url(#pipeShadow)">
+    <rect width="205" height="260" rx="20" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="3" />
+    
+    <!-- Header Pill -->
+    <rect x="16" y="16" width="60" height="22" rx="11" fill="#8ED8FF" stroke="#0E0E0C" stroke-width="1.5" />
+    <text x="46" y="31" text-anchor="middle" class="mono step-badge">STEP 01</text>
+    
+    <text x="16" y="65" class="sans card-title">Optical Gate</text>
+    <text x="16" y="80" class="mono" font-size="9.5" font-weight="700" fill="#7F8B92">OPENCV PRE-CHECK</text>
+
+    <!-- Visual Diagram -->
+    <rect x="16" y="95" width="173" height="60" rx="10" fill="#EEF5FA" stroke="#0E0E0C" stroke-width="1.5" />
+    <circle cx="50" cy="125" r="20" fill="#FF5757" opacity="0.8" />
+    <circle cx="50" cy="125" r="22" fill="none" stroke="#0E0E0C" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="85" y1="115" x2="165" y2="115" stroke="#0E0E0C" stroke-width="2" />
+    <line x1="85" y1="135" x2="145" y2="135" stroke="#46C98B" stroke-width="2" />
+
+    <text x="16" y="175" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Focus Variance</text>
+    <text x="16" y="193" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Red Chromaticity</text>
+    <text x="16" y="211" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Circular Aperture</text>
+    
+    <!-- Tag -->
+    <rect x="16" y="222" width="173" height="24" rx="8" fill="#E8F7ED" stroke="#0E0E0C" stroke-width="1.2" />
+    <text x="102" y="238" text-anchor="middle" class="mono" font-size="9.5" font-weight="800" fill="#0E0E0C">INTERCEPT FABRICATIONS</text>
+  </g>
+
+  <!-- ─── STAGE 2: VESSEL & CONTRAST ─── -->
+  <g transform="translate(270, 85)" filter="url(#pipeShadow)">
+    <rect width="205" height="260" rx="20" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="3" />
+    
+    <rect x="16" y="16" width="60" height="22" rx="11" fill="#FFF48D" stroke="#0E0E0C" stroke-width="1.5" />
+    <text x="46" y="31" text-anchor="middle" class="mono step-badge">STEP 02</text>
+    
+    <text x="16" y="65" class="sans card-title">Morphology</text>
+    <text x="16" y="80" class="mono" font-size="9.5" font-weight="700" fill="#7F8B92">CLAHE + GREEN CHANNEL</text>
+
+    <!-- Visual Diagram -->
+    <rect x="16" y="95" width="173" height="60" rx="10" fill="#0E0E0C" />
+    <path d="M30 140 Q60 110 90 125 T150 110" fill="none" stroke="#46C98B" stroke-width="2.5" />
+    <path d="M70 120 Q95 105 110 140" fill="none" stroke="#46C98B" stroke-width="1.5" />
+    <circle cx="130" cy="115" r="3" fill="#FFF48D" />
+    <circle cx="80" cy="130" r="2.5" fill="#FFF48D" />
+
+    <text x="16" y="175" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ CLAHE Equalization</text>
+    <text x="16" y="193" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Vessel Caliber Ratio</text>
+    <text x="16" y="211" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Optic Disc Localization</text>
+
+    <rect x="16" y="222" width="173" height="24" rx="8" fill="#FFFBE6" stroke="#0E0E0C" stroke-width="1.2" />
+    <text x="102" y="238" text-anchor="middle" class="mono" font-size="9.5" font-weight="800" fill="#0E0E0C">EXTRACT ANATOMY</text>
+  </g>
+
+  <!-- ─── STAGE 3: PYTORCH INFERENCE ─── -->
+  <g transform="translate(500, 85)" filter="url(#pipeShadow)">
+    <rect width="205" height="260" rx="20" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="3" />
+    
+    <rect x="16" y="16" width="60" height="22" rx="11" fill="#FF5757" stroke="#0E0E0C" stroke-width="1.5" />
+    <text x="46" y="31" text-anchor="middle" class="mono step-badge" fill="#FFFFFF">STEP 03</text>
+    
+    <text x="16" y="65" class="sans card-title">5-Class DR AI</text>
+    <text x="16" y="80" class="mono" font-size="9.5" font-weight="700" fill="#7F8B92">EFFICIENTNET + GRAD-CAM</text>
+
+    <!-- Visual Diagram -->
+    <rect x="16" y="95" width="173" height="60" rx="10" fill="#EEF5FA" stroke="#0E0E0C" stroke-width="1.5" />
+    <rect x="26" y="107" width="28" height="36" rx="4" fill="#8ED8FF" stroke="#0E0E0C" stroke-width="1.2" />
+    <rect x="62" y="107" width="28" height="36" rx="4" fill="#FFF48D" stroke="#0E0E0C" stroke-width="1.2" />
+    <rect x="98" y="107" width="28" height="36" rx="4" fill="#FF5757" stroke="#0E0E0C" stroke-width="1.2" />
+    <line x1="135" y1="125" x2="175" y2="125" stroke="#0E0E0C" stroke-width="2" marker-end="url(#arrow)" />
+
+    <text x="16" y="175" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ ICDR Grades 0 to 4</text>
+    <text x="16" y="193" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Spatial Attention Maps</text>
+    <text x="16" y="211" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Lesion Candidate BBox</text>
+
+    <rect x="16" y="222" width="173" height="24" rx="8" fill="#FEE2E2" stroke="#0E0E0C" stroke-width="1.2" />
+    <text x="102" y="238" text-anchor="middle" class="mono" font-size="9.5" font-weight="800" fill="#0E0E0C">MULTI-TASK INFERENCE</text>
+  </g>
+
+  <!-- ─── STAGE 4: UNCERTAINTY TRIAGE ─── -->
+  <g transform="translate(730, 85)" filter="url(#pipeShadow)">
+    <rect width="205" height="260" rx="20" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="3" />
+    
+    <rect x="16" y="16" width="60" height="22" rx="11" fill="#8ED8FF" stroke="#0E0E0C" stroke-width="1.5" />
+    <text x="46" y="31" text-anchor="middle" class="mono step-badge">STEP 04</text>
+    
+    <text x="16" y="65" class="sans card-title">Uncertainty</text>
+    <text x="16" y="80" class="mono" font-size="9.5" font-weight="700" fill="#7F8B92">CALIBRATION &amp; TRIAGE</text>
+
+    <!-- Visual Diagram -->
+    <rect x="16" y="95" width="173" height="60" rx="10" fill="#0E0E0C" />
+    <path d="M30 145 L75 130 L115 110 L165 105" fill="none" stroke="#8ED8FF" stroke-width="2.5" />
+    <circle cx="115" cy="110" r="4" fill="#46C98B" />
+    <line x1="30" y1="148" x2="165" y2="148" stroke="#303A40" stroke-width="1" />
+
+    <text x="16" y="175" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ Temperature Scaling</text>
+    <text x="16" y="193" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ ECE Error &lt; 0.03</text>
+    <text x="16" y="211" class="mono" font-size="10" font-weight="700" fill="#0E0E0C">✓ HITL Abstention Gate</text>
+
+    <rect x="16" y="222" width="173" height="24" rx="8" fill="#EBF5FB" stroke="#0E0E0C" stroke-width="1.2" />
+    <text x="102" y="238" text-anchor="middle" class="mono" font-size="9.5" font-weight="800" fill="#0E0E0C">PREVENT OVERCONFIDENCE</text>
+  </g>
+
+  <!-- ─── STAGE 5: SPECIALIST & REFERRAL ─── -->
+  <g transform="translate(960, 85)" filter="url(#pipeShadow)">
+    <rect width="200" height="260" rx="20" fill="#0E0E0C" stroke="#0E0E0C" stroke-width="3" />
+    
+    <rect x="16" y="16" width="60" height="22" rx="11" fill="#46C98B" />
+    <text x="46" y="31" text-anchor="middle" class="mono step-badge" fill="#0E0E0C">STEP 05</text>
+    
+    <text x="16" y="65" class="sans card-title" fill="#FFFFFF">Specialist</text>
+    <text x="16" y="80" class="mono" font-size="9.5" font-weight="700" fill="#8ED8FF">SIGN-OFF &amp; REPORT</text>
+
+    <!-- Visual Diagram -->
+    <rect x="16" y="95" width="168" height="60" rx="10" fill="#1C242B" stroke="#8ED8FF" stroke-width="1.2" />
+    <rect x="28" y="107" width="30" height="36" rx="4" fill="#FFFFFF" />
+    <line x1="34" y1="117" x2="52" y2="117" stroke="#0E0E0C" stroke-width="1.5" />
+    <line x1="34" y1="123" x2="48" y2="123" stroke="#0E0E0C" stroke-width="1.5" />
+    <circle cx="140" cy="125" r="14" fill="#46C98B" />
+    <text x="140" y="130" text-anchor="middle" class="mono" font-size="14" font-weight="900" fill="#0E0E0C">✓</text>
+
+    <text x="16" y="175" class="mono" font-size="10" font-weight="700" fill="#FFFFFF">✓ Doctor Verification</text>
+    <text x="16" y="193" class="mono" font-size="10" font-weight="700" fill="#FFFFFF">✓ Audit Signature Lock</text>
+    <text x="16" y="211" class="mono" font-size="10" font-weight="700" fill="#FFFFFF">✓ Bilingual PDF Export</text>
+
+    <rect x="16" y="222" width="168" height="24" rx="8" fill="#8ED8FF" />
+    <text x="100" y="238" text-anchor="middle" class="mono" font-size="9.5" font-weight="900" fill="#0E0E0C">OFFICIAL DISPATCH</text>
+  </g>
+</svg>

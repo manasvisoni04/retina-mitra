@@ -1,0 +1,209 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8ED8FF" />
+      <stop offset="60%" stop-color="#A2E2FF" />
+      <stop offset="100%" stop-color="#6DC8FA" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F3F8FC" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8ED8FF" />
+      <stop offset="100%" stop-color="#FFF48D" />
+    </linearGradient>
+    <linearGradient id="retinaGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5757" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#FF9F43" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#0E0E0C" stop-opacity="0.9" />
+    </linearGradient>
+    
+    <!-- Hard Neo-Brutalist Shadow -->
+    <filter id="neoShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="8" dy="8" stdDeviation="0" flood-color="#0E0E0C" flood-opacity="1" />
+    </filter>
+    <filter id="smallNeoShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#0E0E0C" flood-opacity="1" />
+    </filter>
+    <filter id="pillShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#0E0E0C" flood-opacity="1" />
+    </filter>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="24" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Halftone Pattern -->
+    <pattern id="dotGrid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.5" fill="#0E0E0C" fill-opacity="0.08" />
+    </pattern>
+  </defs>
+
+  <style>
+    .font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .hero-title { font-weight: 900; letter-spacing: -0.04em; text-transform: uppercase; fill: #0E0E0C; }
+    .badge-text { font-weight: 800; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+  </style>
+
+  <!-- Background Base Canvas -->
+  <rect width="1200" height="520" rx="32" fill="url(#skyGrad)" stroke="#0E0E0C" stroke-width="4" />
+  <rect width="1200" height="520" rx="32" fill="url(#dotGrid)" />
+
+  <!-- Architectural Wireframe Circles -->
+  <circle cx="1060" cy="180" r="260" fill="none" stroke="#0E0E0C" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.25" />
+  <circle cx="1060" cy="180" r="180" fill="none" stroke="#0E0E0C" stroke-width="1.5" opacity="0.2" />
+  <circle cx="1060" cy="180" r="100" fill="none" stroke="#0E0E0C" stroke-width="2" stroke-dasharray="4 4" opacity="0.3" />
+
+  <!-- ─── FLOATING BENTO CARD 1: CLINICAL BENCHMARK INSPECTOR ─── -->
+  <g transform="translate(740, 60)" filter="url(#neoShadow)">
+    <rect width="390" height="390" rx="28" fill="url(#cardGrad)" stroke="#0E0E0C" stroke-width="3.5" />
+    
+    <!-- Retinal Scan Simulated Viewport -->
+    <g transform="translate(24, 24)">
+      <rect width="342" height="210" rx="18" fill="#0B1318" stroke="#0E0E0C" stroke-width="2.5" />
+      
+      <!-- Fovea & Retinal Fundus Gradient Orb -->
+      <circle cx="171" cy="105" r="88" fill="url(#retinaGlow)" opacity="0.9" />
+      <circle cx="171" cy="105" r="95" fill="none" stroke="#8ED8FF" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6" />
+      
+      <!-- Vessel Vascular Network Simulation Paths -->
+      <path d="M125 105 Q145 90 171 105 T220 120 M171 105 Q160 65 140 45 M171 105 Q190 70 215 50 M171 105 Q165 145 150 170 M171 105 Q185 150 205 168" 
+            fill="none" stroke="#FF5757" stroke-width="2" stroke-linecap="round" opacity="0.8" />
+      <path d="M135 100 Q150 95 171 105 T205 112 M171 105 Q175 80 185 60" 
+            fill="none" stroke="#FFF48D" stroke-width="1.2" stroke-linecap="round" opacity="0.7" />
+
+      <!-- Optical Targeting Grid Overlay -->
+      <line x1="171" y1="15" x2="171" y2="195" stroke="#8ED8FF" stroke-width="1" stroke-dasharray="4 4" opacity="0.4" />
+      <line x1="25" y1="105" x2="317" y2="105" stroke="#8ED8FF" stroke-width="1" stroke-dasharray="4 4" opacity="0.4" />
+      
+      <!-- Macula/Optic Disc Box -->
+      <rect x="195" y="90" width="30" height="30" rx="6" fill="none" stroke="#46C98B" stroke-width="1.8" />
+      <text x="230" y="108" class="font-mono" font-size="9" font-weight="700" fill="#46C98B">OD: 0.98</text>
+
+      <!-- Scan HUD Overlay Tags -->
+      <rect x="12" y="12" width="105" height="22" rx="11" fill="#0E0E0C" fill-opacity="0.85" />
+      <circle cx="23" cy="23" r="4" fill="#46C98B" />
+      <text x="32" y="27" class="font-mono" font-size="9.5" font-weight="800" fill="#FFFFFF">45° POSTERIOR</text>
+
+      <rect x="235" y="12" width="95" height="22" rx="11" fill="#0E0E0C" fill-opacity="0.85" />
+      <text x="245" y="27" class="font-mono" font-size="9.5" font-weight="800" fill="#8ED8FF">AI VERIFIED</text>
+    </g>
+
+    <!-- Telemetry Readouts Inside Card -->
+    <g transform="translate(24, 252)">
+      <rect width="342" height="52" rx="14" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="2" />
+      
+      <g transform="translate(16, 16)">
+        <text class="font-mono badge-text" font-size="9" fill="#7F8B92">ICDR CLASSIFICATION</text>
+        <text y="22" class="font-sans" font-size="14" font-weight="900" fill="#0E0E0C">Level 2: Moderate NPDR</text>
+      </g>
+      
+      <g transform="translate(240, 16)">
+        <rect x="0" y="2" width="76" height="24" rx="12" fill="#0E0E0C" />
+        <text x="38" y="18" text-anchor="middle" class="font-mono" font-size="11" font-weight="800" fill="#8ED8FF">96.4%</text>
+      </g>
+    </g>
+
+    <!-- Lower Status Chips -->
+    <g transform="translate(24, 320)">
+      <rect width="165" height="42" rx="12" fill="#E8F7ED" stroke="#0E0E0C" stroke-width="1.8" />
+      <circle cx="18" cy="21" r="5" fill="#46C98B" />
+      <text x="30" y="17" class="font-mono" font-size="8.5" font-weight="800" fill="#0E0E0C">OPENCV GATE</text>
+      <text x="30" y="30" class="font-mono" font-size="11" font-weight="900" fill="#0E0E0C">SHARP · 842.1</text>
+
+      <g transform="translate(177, 0)">
+        <rect width="165" height="42" rx="12" fill="#FFFBE6" stroke="#0E0E0C" stroke-width="1.8" />
+        <circle cx="18" cy="21" r="5" fill="#FFB800" />
+        <text x="30" y="17" class="font-mono" font-size="8.5" font-weight="800" fill="#0E0E0C">HITL TRIAGE</text>
+        <text x="30" y="30" class="font-mono" font-size="11" font-weight="900" fill="#0E0E0C">SPECIALIST SIGNED</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ─── HERO TYPOGRAPHY & LEFT PANE ─── -->
+  <g transform="translate(64, 75)">
+    <!-- Top System Eyebrow Badge -->
+    <g filter="url(#pillShadow)">
+      <rect width="320" height="36" rx="18" fill="#0E0E0C" />
+      <circle cx="20" cy="18" r="4.5" fill="#46C98B">
+        <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+      </circle>
+      <text x="34" y="23" class="font-mono badge-text" fill="#8ED8FF">✦ CLINICAL GRADE AI SCREENING</text>
+      <rect x="238" y="7" width="72" height="22" rx="11" fill="#8ED8FF" />
+      <text x="274" y="22" text-anchor="middle" class="font-mono" font-size="9" font-weight="900" fill="#0E0E0C">v2.4.0</text>
+    </g>
+
+    <!-- Main Title: RETINA-MITRA -->
+    <g transform="translate(0, 85)">
+      <text class="font-sans hero-title" font-size="64" x="0" y="0">RETINA-MITRA</text>
+      <text class="font-sans hero-title" font-size="64" x="480" y="-8" fill="#0E0E0C">*</text>
+    </g>
+
+    <!-- Subtitle Definition -->
+    <text x="0" y="125" class="font-mono" font-size="14" font-weight="800" fill="#22333A" letter-spacing="0.08em">
+      EXPLAINABLE RETINAL SCREENING &amp; DECISION-SUPPORT WORKBENCH
+    </text>
+
+    <!-- Detailed Manifesto Tagline -->
+    <g transform="translate(0, 155)">
+      <text class="font-sans" font-size="16" font-weight="600" fill="#22333A" opacity="0.9">
+        <tspan x="0" dy="0">High-throughput, rural-ready tele-ophthalmology platform engineered</tspan>
+        <tspan x="0" dy="24">with client-side OpenCV optical verification, 5-class ICDR severity grading,</tspan>
+        <tspan x="0" dy="24">6-layer explainable heatmaps, and specialist sign-off audit trails.</tspan>
+      </text>
+    </g>
+
+    <!-- Interactive Badges Pill Box -->
+    <g transform="translate(0, 255)">
+      <!-- Pill 1: OpenCV -->
+      <g filter="url(#smallNeoShadow)">
+        <rect width="180" height="42" rx="21" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="2.5" />
+        <circle cx="22" cy="21" r="7" fill="#8ED8FF" stroke="#0E0E0C" stroke-width="2" />
+        <text x="38" y="26" class="font-mono" font-size="11" font-weight="900" fill="#0E0E0C">OPENCV 4.10</text>
+      </g>
+
+      <!-- Pill 2: PyTorch -->
+      <g transform="translate(195, 0)" filter="url(#smallNeoShadow)">
+        <rect width="180" height="42" rx="21" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="2.5" />
+        <circle cx="22" cy="21" r="7" fill="#FF5757" stroke="#0E0E0C" stroke-width="2" />
+        <text x="38" y="26" class="font-mono" font-size="11" font-weight="900" fill="#0E0E0C">PYTORCH ML</text>
+      </g>
+
+      <!-- Pill 3: Next.js 16 -->
+      <g transform="translate(390, 0)" filter="url(#smallNeoShadow)">
+        <rect width="180" height="42" rx="21" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="2.5" />
+        <circle cx="22" cy="21" r="7" fill="#46C98B" stroke="#0E0E0C" stroke-width="2" />
+        <text x="38" y="26" class="font-mono" font-size="11" font-weight="900" fill="#0E0E0C">NEXT.JS 16</text>
+      </g>
+    </g>
+
+    <!-- Metric Callout Badges -->
+    <g transform="translate(0, 325)">
+      <g filter="url(#smallNeoShadow)">
+        <rect width="570" height="52" rx="16" fill="#0E0E0C" />
+        <g transform="translate(24, 18)">
+          <text class="font-mono" font-size="9" font-weight="700" fill="#7F8B92">SENSITIVITY (REFERABLE DR)</text>
+          <text y="18" class="font-sans" font-size="16" font-weight="900" fill="#8ED8FF">98.2%</text>
+        </g>
+        <line x1="200" y1="12" x2="200" y2="40" stroke="#303A40" stroke-width="1.5" />
+        <g transform="translate(225, 18)">
+          <text class="font-mono" font-size="9" font-weight="700" fill="#7F8B92">SPECIFICITY</text>
+          <text y="18" class="font-sans" font-size="16" font-weight="900" fill="#46C98B">94.7%</text>
+        </g>
+        <line x1="340" y1="12" x2="340" y2="40" stroke="#303A40" stroke-width="1.5" />
+        <g transform="translate(365, 18)">
+          <text class="font-mono" font-size="9" font-weight="700" fill="#7F8B92">LATENCY</text>
+          <text y="18" class="font-sans" font-size="16" font-weight="900" fill="#FFF48D">&lt;450ms</text>
+        </g>
+        <line x1="455" y1="12" x2="455" y2="40" stroke="#303A40" stroke-width="1.5" />
+        <g transform="translate(480, 18)">
+          <text class="font-mono" font-size="9" font-weight="700" fill="#7F8B92">ECE CALIB.</text>
+          <text y="18" class="font-sans" font-size="16" font-weight="900" fill="#FFFFFF">0.024</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" width="100%" height="100%">
+  <defs>
+    <filter id="bentoShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#0E0E0C" flood-opacity="1" />
+    </filter>
+  </defs>
+
+  <style>
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  </style>
+
+  <rect width="1200" height="240" rx="24" fill="#EEF5FA" stroke="#0E0E0C" stroke-width="3" />
+
+  <!-- Card 1: Core AI & CV -->
+  <g transform="translate(30, 30)" filter="url(#bentoShadow)">
+    <rect width="260" height="180" rx="18" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="2.5" />
+    <rect x="16" y="16" width="36" height="36" rx="10" fill="#FF5757" />
+    <text x="34" y="39" text-anchor="middle" class="mono" font-size="16" font-weight="900" fill="#FFFFFF">Ψ</text>
+    <text x="64" y="32" class="sans" font-size="13" font-weight="900" fill="#0E0E0C">CV &amp; Inference Engine</text>
+    <text x="64" y="46" class="mono" font-size="9" font-weight="700" fill="#7F8B92">PYTORCH · OPENCV</text>
+    <text x="16" y="80" class="sans" font-size="11" font-weight="600" fill="#303A40">• EfficientNet-B0 (5-Class ICDR)</text>
+    <text x="16" y="100" class="sans" font-size="11" font-weight="600" fill="#303A40">• OpenCV Laplacian Focus Variance</text>
+    <text x="16" y="120" class="sans" font-size="11" font-weight="600" fill="#303A40">• Grad-CAM Attention Heatmaps</text>
+    <text x="16" y="140" class="sans" font-size="11" font-weight="600" fill="#303A40">• Temperature Scaling (ECE &lt; 0.03)</text>
+    <rect x="16" y="152" width="228" height="16" rx="8" fill="#FEE2E2" />
+    <text x="130" y="163" text-anchor="middle" class="mono" font-size="8" font-weight="800" fill="#0E0E0C">CLINICAL SENSITIVITY: 98.2%</text>
+  </g>
+
+  <!-- Card 2: Next.js Modern Frontend -->
+  <g transform="translate(320, 30)" filter="url(#bentoShadow)">
+    <rect width="260" height="180" rx="18" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="2.5" />
+    <rect x="16" y="16" width="36" height="36" rx="10" fill="#8ED8FF" stroke="#0E0E0C" stroke-width="1.5" />
+    <text x="34" y="39" text-anchor="middle" class="mono" font-size="16" font-weight="900" fill="#0E0E0C">⚛</text>
+    <text x="64" y="32" class="sans" font-size="13" font-weight="900" fill="#0E0E0C">Frontend &amp; Canvas</text>
+    <text x="64" y="46" class="mono" font-size="9" font-weight="700" fill="#7F8B92">NEXT.JS 16 · REACT 19</text>
+    <text x="16" y="80" class="sans" font-size="11" font-weight="600" fill="#303A40">• Turbopack App Router</text>
+    <text x="16" y="100" class="sans" font-size="11" font-weight="600" fill="#303A40">• HTML5 Hardware Canvas Overlay</text>
+    <text x="16" y="120" class="sans" font-size="11" font-weight="600" fill="#303A40">• Neo-Brutalist Kinetic Audio FX</text>
+    <text x="16" y="140" class="sans" font-size="11" font-weight="600" fill="#303A40">• Tailwind CSS v4 Design System</text>
+    <rect x="16" y="152" width="228" height="16" rx="8" fill="#E0F2FE" />
+    <text x="130" y="163" text-anchor="middle" class="mono" font-size="8" font-weight="800" fill="#0E0E0C">60FPS HIGH-DPI CANVAS</text>
+  </g>
+
+  <!-- Card 3: Backend & Telemetry -->
+  <g transform="translate(610, 30)" filter="url(#bentoShadow)">
+    <rect width="260" height="180" rx="18" fill="#FFFFFF" stroke="#0E0E0C" stroke-width="2.5" />
+    <rect x="16" y="16" width="36" height="36" rx="10" fill="#46C98B" stroke="#0E0E0C" stroke-width="1.5" />
+    <text x="34" y="39" text-anchor="middle" class="mono" font-size="16" font-weight="900" fill="#0E0E0C">⚡</text>
+    <text x="64" y="32" class="sans" font-size="13" font-weight="900" fill="#0E0E0C">Microservices &amp; API</text>
+    <text x="64" y="46" class="mono" font-size="9" font-weight="700" fill="#7F8B92">FASTAPI · ASGI · UVICORN</text>
+    <text x="16" y="80" class="sans" font-size="11" font-weight="600" fill="#303A40">• Asynchronous Batch Processing</text>
+    <text x="16" y="100" class="sans" font-size="11" font-weight="600" fill="#303A40">• WebSockets Live Telemetry Feed</text>
+    <text x="16" y="120" class="sans" font-size="11" font-weight="600" fill="#303A40">• Pydantic Strict Clinical Schemas</text>
+    <text x="16" y="140" class="sans" font-size="11" font-weight="600" fill="#303A40">• Non-Prescriptive Safety Intercepts</text>
+    <rect x="16" y="152" width="228" height="16" rx="8" fill="#E8F7ED" />
+    <text x="130" y="163" text-anchor="middle" class="mono" font-size="8" font-weight="800" fill="#0E0E0C">SUB-450MS PIPELINE LATENCY</text>
+  </g>
+
+  <!-- Card 4: Clinical Report & Dispatch -->
+  <g transform="translate(900, 30)" filter="url(#bentoShadow)">
+    <rect width="270" height="180" rx="18" fill="#0E0E0C" stroke="#0E0E0C" stroke-width="2.5" />
+    <rect x="16" y="16" width="36" height="36" rx="10" fill="#FFF48D" />
+    <text x="34" y="39" text-anchor="middle" class="mono" font-size="16" font-weight="900" fill="#0E0E0C">📄</text>
+    <text x="64" y="32" class="sans" font-size="13" font-weight="900" fill="#FFFFFF">Specialist Dispatch</text>
+    <text x="64" y="46" class="mono" font-size="9" font-weight="700" fill="#8ED8FF">JSPDF · HITL WORKSTATION</text>
+    <text x="16" y="80" class="sans" font-size="11" font-weight="600" fill="#CFCFC4">• 7-Point Patient Medical Record</text>
+    <text x="16" y="100" class="sans" font-size="11" font-weight="600" fill="#CFCFC4">• Bilingual PDF Engine (EN / MR)</text>
+    <text x="16" y="120" class="sans" font-size="11" font-weight="600" fill="#CFCFC4">• Chronological Audit Sign-Off Lock</text>
+    <text x="16" y="140" class="sans" font-size="11" font-weight="600" fill="#CFCFC4">• Clinician Grade Override Workflow</text>
+    <rect x="16" y="152" width="238" height="16" rx="8" fill="#8ED8FF" />
+    <text x="135" y="163" text-anchor="middle" class="mono" font-size="8" font-weight="900" fill="#0E0E0C">GOVERNMENT / NHM COMPLIANT</text>
+  </g>
+</svg>
